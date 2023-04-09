@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Album {
+  id          String   @id
+  title       String
+  show        Boolean
+  lastRefresh DateTime @default(now())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  Photo     Photo[]
+}
+
+model GoogleToken {
+  id           Int    @id @default(autoincrement())
+  accessToken  String
+  refreshToken String
+  expiryDate   BigInt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Photo {
+  id           String   @id
+  orientation  String
+  albumId      String
+  creationTime DateTime
+  album        Album    @relation(fields: [albumId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
