@@ -2,7 +2,7 @@
 
 A smart display with various widgets.
 
-Included widgets:
+Included:
 
 - Time
 - Weather
@@ -30,9 +30,9 @@ yarn dev
 
 ## Credits:
 
-Weather provided by [Open-Meteo](https://open-meteo.com/)
-Icons provided by [amCharts](https://www.amcharts.com/)
+- Weather provided by [Open-Meteo](https://open-meteo.com/)
+- Icons provided by [amCharts](https://www.amcharts.com/)
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](https://github.com/thomasmarren/smart-display/blob/main/LICENSE)
