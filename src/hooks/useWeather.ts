@@ -24,8 +24,8 @@ const params = () => {
   const day = ("0" + today.getDate()).slice(-2);
   const date = `${today.getFullYear()}-${month}-${day}`;
   return new URLSearchParams({
-    latitude: process.env.LATITUDE as string,
-    longitude: process.env.LONGITUDE as string,
+    latitude: process.env.NEXT_PUBLIC_LATITUDE as string,
+    longitude: process.env.NEXT_PUBLIC_LONGITUDE as string,
     current_weather: "true",
     temperature_unit: "fahrenheit",
     timeformat: "iso8601",
@@ -33,7 +33,7 @@ const params = () => {
     forecast_days: "7",
     start_date: date,
     end_date: date,
-    timezone: process.env.TIMEZONE as string,
+    timezone: process.env.NEXT_PUBLIC_TIMEZONE as string,
   }).toString();
 };
 
@@ -53,8 +53,6 @@ export const useWeather = () => {
       );
 
       const data: OpenMeteoForecast = await response.json();
-
-      console.error(data);
 
       setWeather({
         icon: ICONS[data.current_weather.weathercode],
