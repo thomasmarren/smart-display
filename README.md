@@ -7,6 +7,7 @@ Included:
 - Time
 - Weather
 - Google Photos
+- Spotify (Currently playing track)
 
 ## Getting Started
 
@@ -26,7 +27,9 @@ yarn dev
 
 - [Next.js](https://nextjs.org/)
 - [Prisma](https://www.prisma.io/)
-- [Google Photos Api](https://developers.google.com/photos)
+- [SQLite](https://sqlite.org/index.html)
+- [Google Photos API](https://developers.google.com/photos)
+- [Spotify API](https://developer.spotify.com/)
 
 ## Credits:
 

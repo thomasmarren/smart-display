@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useIsAuthenticated } from "../hooks/useIsAuthenticated";
 import { PhotoSlides } from "./PhotoSlides";
 import { Sleep } from "./Sleep";
+import { Spotify } from "./Spotify";
 import { Time } from "./Time";
 
 export const Display = () => {
@@ -41,6 +42,7 @@ export const Display = () => {
         backgroundColor: "black",
       }}
     >
+      <Spotify />
       <Time />
       <PhotoSlides slideshowSpeedSeconds={10} />
     </div>

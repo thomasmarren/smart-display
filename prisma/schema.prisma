@@ -41,3 +41,13 @@ model Photo {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 }
+
+model SpotifyToken {
+  id           Int    @id @default(autoincrement())
+  accessToken  String
+  refreshToken String
+  expiryDate   BigInt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}

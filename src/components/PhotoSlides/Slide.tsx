@@ -19,6 +19,7 @@ const Photo = ({
       fill
       sizes={orientation === Orientation.LANDSCAPE ? "100vw" : "50vw"}
       style={{ objectFit: "cover" }}
+      priority
       onError={() => {
         setImgSrc(
           "https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg"
@@ -65,8 +66,8 @@ export const Slide = ({
           <div
             style={{
               position: "absolute",
-              bottom: 30,
-              left: 20,
+              bottom: orientation === Orientation.LANDSCAPE ? "2%" : "4%",
+              left: orientation === Orientation.LANDSCAPE ? "2%" : "4%",
               color: "white",
               fontSize: 18,
               fontFamily: "Lato",

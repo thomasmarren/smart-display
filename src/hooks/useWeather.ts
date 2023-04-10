@@ -1,5 +1,5 @@
-import { every } from "@/utils/dates";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
+import { useEvery } from "./useEvery";
 
 type OpenMeteoForecast = {
   current_weather: { weathercode: number; temperature: number };
@@ -46,26 +46,21 @@ export const useWeather = () => {
     temperature: 0,
   });
 
-  useEffect(() => {
-    const getWeather = async () => {
-      const response = await fetch(
-        `https://api.open-meteo.com/v1/forecast?${params()}`
-      );
+  const getWeather = useCallback(async () => {
+    console.log("get weather");
+    const response = await fetch(
+      `https://api.open-meteo.com/v1/forecast?${params()}`
+    );
 
-      const data: OpenMeteoForecast = await response.json();
+    const data: OpenMeteoForecast = await response.json();
 
-      setWeather({
-        icon: ICONS[data.current_weather.weathercode],
-        temperature: Math.round(data.current_weather.temperature),
-      });
-    };
-
-    getWeather();
-
-    const interval = every({ minutes: 30 }, () => getWeather());
-
-    return () => clearInterval(interval);
+    setWeather({
+      icon: ICONS[data.current_weather.weathercode],
+      temperature: Math.round(data.current_weather.temperature),
+    });
   }, []);
+
+  useEvery({ minutes: 30 }, getWeather);
 
   return weather;
 };

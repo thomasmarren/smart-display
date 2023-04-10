@@ -2,6 +2,7 @@ import { useWeather } from "@/hooks/useWeather";
 import { WeatherIcon } from "./icons";
 
 export const Weather = () => {
+  console.debug("Rendering Weather");
   const weather = useWeather();
 
   return (

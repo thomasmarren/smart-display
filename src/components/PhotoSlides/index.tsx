@@ -29,6 +29,8 @@ export const PhotoSlides = ({
     return () => clearInterval(interval);
   });
 
+  // return null;
+
   if (!photoSlides) return null;
 
   return (

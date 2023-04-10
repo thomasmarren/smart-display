@@ -28,7 +28,7 @@ export const useIsAuthenticated = () => {
         const data = await response.json();
         setAuthorizationUrl(data.url);
       } catch (e) {
-        console.error("onSuccess");
+        console.error("onError");
         console.error(e);
       }
     };
