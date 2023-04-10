@@ -4,7 +4,13 @@ import { routeHandler } from "@/config/routeHandler";
 import { HttpStatus } from "@/constants";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-type GetData = any;
+export type GetData = {
+  isPlaying: boolean;
+  album: string | null;
+  artist: string | null;
+  track: string | null;
+  albumUrl: string | null;
+};
 export type SpotifyControllerData = GetData;
 
 export class SpotifyController extends Controller {
@@ -47,7 +53,13 @@ export class SpotifyController extends Controller {
       }
     );
     if (currentlyPlayingResponse.status === 204) {
-      return res.status(HttpStatus.OK).json({});
+      return res.status(HttpStatus.OK).json({
+        isPlaying: false,
+        album: null,
+        artist: null,
+        track: null,
+        albumUrl: null,
+      });
     }
     const currentlyPlaying: {
       item: {
@@ -64,16 +76,18 @@ export class SpotifyController extends Controller {
         }[];
         name: string;
       };
+      is_playing: boolean;
     } = await currentlyPlayingResponse.json();
 
     const albumUrl = currentlyPlaying.item.album.images.find(
       (image) => image.height === 300
-    );
+    ) as { url: string };
     res.status(HttpStatus.OK).json({
+      isPlaying: currentlyPlaying.is_playing,
       album: currentlyPlaying.item.album.name,
       artist: currentlyPlaying.item.artists[0].name,
       track: currentlyPlaying.item.name,
-      albumUrl: albumUrl?.url,
+      albumUrl: albumUrl.url,
     });
   }
 }

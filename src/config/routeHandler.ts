@@ -2,13 +2,15 @@ import { HttpMethod } from "@/constants";
 import { AlbumsController } from "@/pages/api/albums";
 import { GoogleAuthController } from "@/pages/api/google_auth";
 import { PhotosController } from "@/pages/api/photos";
+import { SpotifyController } from "@/pages/api/spotify";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export const routeHandler = async (
   controller:
     | typeof AlbumsController.prototype
     | typeof GoogleAuthController.prototype
-    | typeof PhotosController.prototype,
+    | typeof PhotosController.prototype
+    | typeof SpotifyController.prototype,
   req: NextApiRequest,
   res: NextApiResponse
 ) => {

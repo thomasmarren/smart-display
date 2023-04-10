@@ -1,20 +1,17 @@
 import { useEvery } from "./useEvery";
 import { useCallback, useState } from "react";
+import { GetData as SpotifyGetData } from "@/pages/api/spotify";
 
 export const useSpotify = () => {
-  const [currentlyPlaying, setCurrentlyPlaying] = useState<{
-    album: string;
-    artist: string;
-    track: string;
-    albumUrl: string;
-  } | null>(null);
+  const [currentlyPlaying, setCurrentlyPlaying] =
+    useState<SpotifyGetData | null>(null);
 
   const getCurrentlyPlaying = useCallback(async () => {
     const response = await fetch("/api/spotify");
 
-    const data = await response.json();
+    const data: SpotifyGetData = await response.json();
 
-    if (!data.track) {
+    if (!data.track || !data.isPlaying) {
       setCurrentlyPlaying(null);
       return;
     }
