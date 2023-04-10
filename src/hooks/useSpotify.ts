@@ -14,14 +14,15 @@ export const useSpotify = () => {
 
     const data = await response.json();
 
-    console.log(data);
-
-    if (!data.track) return;
+    if (!data.track) {
+      setCurrentlyPlaying(null);
+      return;
+    }
 
     setCurrentlyPlaying(data);
   }, []);
 
-  useEvery({ minutes: 5 }, getCurrentlyPlaying);
+  useEvery({ minute: 1 }, getCurrentlyPlaying);
 
   return { data: currentlyPlaying };
 };
