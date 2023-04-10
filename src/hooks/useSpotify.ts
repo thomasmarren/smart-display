@@ -19,7 +19,7 @@ export const useSpotify = () => {
     setCurrentlyPlaying(data);
   }, []);
 
-  useEvery({ minute: 1 }, getCurrentlyPlaying);
+  useEvery({ seconds: 30 }, getCurrentlyPlaying);
 
   return { data: currentlyPlaying };
 };

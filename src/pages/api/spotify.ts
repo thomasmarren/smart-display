@@ -9,7 +9,7 @@ export type GetData = {
   album: string | null;
   artist: string | null;
   track: string | null;
-  albumUrl: string | null;
+  albumUrl: string;
 };
 export type SpotifyControllerData = GetData;
 
@@ -58,7 +58,7 @@ export class SpotifyController extends Controller {
         album: null,
         artist: null,
         track: null,
-        albumUrl: null,
+        albumUrl: "",
       });
     }
     const currentlyPlaying: {
