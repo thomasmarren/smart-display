@@ -47,7 +47,6 @@ export const useWeather = () => {
   });
 
   const getWeather = useCallback(async () => {
-    console.log("get weather");
     const response = await fetch(
       `https://api.open-meteo.com/v1/forecast?${params()}`
     );

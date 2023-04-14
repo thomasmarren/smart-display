@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export const Clock = () => {
+export const Clock = ({ style = {} }) => {
   const [time, setTime] = useState(new Date());
   useEffect(() => {
     let interval = setInterval(() => setTime(new Date()), 1000);
@@ -18,6 +18,7 @@ export const Clock = () => {
       style={{
         lineHeight: "50px",
         fontSize: "5em",
+        ...style,
       }}
     >
       {hours}:{minutes}

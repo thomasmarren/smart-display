@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -p 3000",
+    "pm2-start": "pm2 start npm --name \"smart-display\" -- start",
     "restart": "pm2 stop all && yarn build && pm2 start all",
     "lint": "next lint",
     "db:migrate": "yarn prisma migrate dev"

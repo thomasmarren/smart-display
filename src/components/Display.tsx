@@ -1,5 +1,5 @@
-import { every } from "@/utils/dates";
-import { useEffect, useState } from "react";
+import { useEvery } from "@/hooks/useEvery";
+import { useCallback, useState } from "react";
 import { useIsAuthenticated } from "../hooks/useIsAuthenticated";
 import { PhotoSlides } from "./PhotoSlides";
 import { Sleep } from "./Sleep";
@@ -10,18 +10,16 @@ export const Display = () => {
   const [sleep, setSleep] = useState(false);
   const { authorizationUrl, loading, isAuthenticated } = useIsAuthenticated();
 
-  useEffect(() => {
-    const interval = every({ minute: 1 }, () => {
-      if (!sleep && new Date().getHours() === 22) {
-        setSleep(true);
-      }
-      if (sleep && new Date().getHours() === 8) {
-        setSleep(false);
-      }
-    });
+  const checkSleep = useCallback(() => {
+    if (!sleep && new Date().getHours() === 0) {
+      setSleep(true);
+    }
+    if (sleep && new Date().getHours() === 8) {
+      setSleep(false);
+    }
+  }, []);
 
-    return () => clearInterval(interval);
-  });
+  useEvery({ minute: 1 }, checkSleep);
 
   if (loading) {
     return <div>Loading...</div>;
