@@ -11,13 +11,13 @@ export const Display = () => {
   const { authorizationUrl, loading, isAuthenticated } = useIsAuthenticated();
 
   const checkSleep = useCallback(() => {
-    if (!sleep && new Date().getHours() === 0) {
+    if (!sleep && new Date().getHours() === 22) {
       setSleep(true);
     }
     if (sleep && new Date().getHours() === 8) {
       setSleep(false);
     }
-  }, []);
+  }, [sleep]);
 
   useEvery({ minute: 1 }, checkSleep);
 

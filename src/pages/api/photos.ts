@@ -88,6 +88,9 @@ export class PhotosController extends Controller {
             lt: hoursAgo(24),
           },
         },
+        include: {
+          Photo: true,
+        },
         orderBy: {
           lastRefresh: "asc",
         },
@@ -100,9 +103,13 @@ export class PhotosController extends Controller {
           .send({ message: "No albums ready to refresh" });
       }
 
+      const currentPhotosCount = album.Photo.length;
+
       const albumPhotos = await PhotoService.createFromAlbum({
         albumId: album.id,
       });
+
+      const totalPhotosCount = albumPhotos.length;
 
       await prisma.album.update({
         data: {
@@ -112,7 +119,9 @@ export class PhotosController extends Controller {
       });
 
       res.status(HttpStatus.CREATED).json({
-        message: `Created ${albumPhotos.length} photos from ${album.title} album.`,
+        message: `Created ${
+          totalPhotosCount - currentPhotosCount
+        } photos from ${album.title} album.`,
       });
     } catch (e: any) {
       console.error("Error in PhotosController#POST");
