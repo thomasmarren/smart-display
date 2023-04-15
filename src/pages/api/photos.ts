@@ -20,13 +20,15 @@ export class PhotosController extends Controller {
   async GET(_req: NextApiRequest, res: NextApiResponse<GetData>) {
     const photoCount = await prisma.photo.count();
     const skip = Math.max(0, Math.floor(Math.random() * photoCount) - TAKE);
-    const orderBy = "id" as string;
-    const orderDir = this.randomPick(["asc", "desc"]);
+    const orderDir = this.randomPick(["asc", "desc"]) as "asc" | "desc";
     let photos = await prisma.photo.findMany({
       take: TAKE,
-      orderBy: { [orderBy]: orderDir },
-      skip,
-      include: {
+      orderBy: [{ displayedCount: "asc" }, { sortOrder: orderDir }],
+      skip: 0,
+      select: {
+        id: true,
+        creationTime: true,
+        orientation: true,
         album: true,
       },
     });
@@ -46,9 +48,16 @@ export class PhotosController extends Controller {
 
       return {
         ...photo,
-        url: `${googlePhotosPhoto.baseUrl}=w${width * 0.5}-h${height * 0.5}`,
+        url: `${googlePhotosPhoto.baseUrl}=w${Math.ceil(
+          width * 0.5
+        )}-h${Math.ceil(height * 0.5)}`,
       };
     });
+
+    const ids = photos.map((photo) => `'${photo.id}'`).join(",");
+    await prisma.$executeRawUnsafe(
+      `UPDATE Photo SET displayedCount = displayedCount + 1, sortOrder = random() WHERE id IN (${ids})`
+    );
 
     const portrait = photos.filter(
       (photo) => photo.orientation === Orientation.PORTRAIT

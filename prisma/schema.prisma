@@ -32,11 +32,13 @@ model GoogleToken {
 }
 
 model Photo {
-  id           String   @id
-  orientation  String
-  albumId      String
-  creationTime DateTime
-  album        Album    @relation(fields: [albumId], references: [id])
+  id             String   @id
+  orientation    String
+  albumId        String
+  creationTime   DateTime
+  album          Album    @relation(fields: [albumId], references: [id])
+  sortOrder      BigInt   @default(0)
+  displayedCount BigInt   @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())

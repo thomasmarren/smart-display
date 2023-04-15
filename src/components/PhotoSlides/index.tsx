@@ -34,7 +34,7 @@ export const PhotoSlides = ({
   if (!photoSlides) return null;
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{ display: "flex", width: "100vw" }}>
       {photoSlides.map((slide, i) => (
         <Slide key={i} currentIndex={index} index={i} slide={slide} />
       ))}
