@@ -8,6 +8,8 @@ Included:
 - Weather
 - Google Photos
 - Spotify (Currently playing track)
+- Holidays
+- Ecobee
 
 ## Getting Started
 
@@ -30,6 +32,7 @@ yarn dev
 - [SQLite](https://sqlite.org/index.html)
 - [Google Photos API](https://developers.google.com/photos)
 - [Spotify API](https://developer.spotify.com/)
+- [Ecobee API](https://www.ecobee.com/home/developer/api/documentation/v1/auth/auth-intro.shtml)
 
 ## Credits:
 
