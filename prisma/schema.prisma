@@ -21,11 +21,32 @@ model Album {
   Photo     Photo[]
 }
 
+model EcobeeToken {
+  id           Int    @id @default(autoincrement())
+  accessToken  String
+  refreshToken String
+  expiryDate   BigInt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
 model GoogleToken {
   id           Int    @id @default(autoincrement())
   accessToken  String
   refreshToken String
   expiryDate   BigInt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Holiday {
+  id      Int    @id @default(autoincrement())
+  name    String
+  month   String
+  day     String
+  message String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())

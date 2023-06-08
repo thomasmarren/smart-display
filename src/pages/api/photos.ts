@@ -18,74 +18,80 @@ const TAKE = 50;
 
 export class PhotosController extends Controller {
   async GET(_req: NextApiRequest, res: NextApiResponse<GetData>) {
-    const photoCount = await prisma.photo.count();
-    const skip = Math.max(0, Math.floor(Math.random() * photoCount) - TAKE);
-    const orderDir = this.randomPick(["asc", "desc"]) as "asc" | "desc";
-    let photos = await prisma.photo.findMany({
-      take: TAKE,
-      orderBy: [{ displayedCount: "asc" }, { sortOrder: orderDir }],
-      skip: 0,
-      select: {
-        id: true,
-        creationTime: true,
-        orientation: true,
-        album: true,
-      },
-    });
+    try {
+      const orderDir = this.randomPick(["asc", "desc"]) as "asc" | "desc";
+      let photos = await prisma.photo.findMany({
+        take: TAKE,
+        orderBy: [{ displayedCount: "asc" }, { sortOrder: orderDir }],
+        select: {
+          id: true,
+          creationTime: true,
+          orientation: true,
+          album: true,
+        },
+      });
 
-    const googlePhotosClient = await new GooglePhotos().connect();
+      const googlePhotosClient = await new GooglePhotos().connect();
 
-    const googlePhotosPhotos = await googlePhotosClient.photosForIds({
-      ids: photos.map((photo) => photo.id),
-    });
+      const googlePhotosPhotos = await googlePhotosClient.photosForIds({
+        ids: photos.map((photo) => photo.id),
+      });
 
-    photos = photos.map((photo) => {
-      const googlePhotosPhoto = googlePhotosPhotos.find(
-        (p: { id: string }) => p.id === photo.id
+      photos = photos.flatMap((photo) => {
+        const googlePhotosPhoto = googlePhotosPhotos.find(
+          (p: { id: string }) => p?.id === photo.id
+        );
+
+        if (!googlePhotosPhoto) return [];
+
+        const { height, width } = googlePhotosPhoto.mediaMetadata;
+
+        return [
+          {
+            ...photo,
+            url: `${googlePhotosPhoto.baseUrl}=w${Math.ceil(
+              width * 0.5
+            )}-h${Math.ceil(height * 0.5)}`,
+          },
+        ];
+      });
+
+      const ids = photos.map((photo) => `'${photo.id}'`).join(",");
+      await prisma.$executeRawUnsafe(
+        `UPDATE Photo SET displayedCount = displayedCount + 1, sortOrder = random() WHERE id IN (${ids})`
       );
 
-      const { height, width } = googlePhotosPhoto.mediaMetadata;
+      const portrait = photos.filter(
+        (photo) => photo.orientation === Orientation.PORTRAIT
+      );
+      const landscape = photos.filter(
+        (photo) => photo.orientation === Orientation.LANDSCAPE
+      );
 
-      return {
-        ...photo,
-        url: `${googlePhotosPhoto.baseUrl}=w${Math.ceil(
-          width * 0.5
-        )}-h${Math.ceil(height * 0.5)}`,
-      };
-    });
+      const photoSlides: any[] = [];
 
-    const ids = photos.map((photo) => `'${photo.id}'`).join(",");
-    await prisma.$executeRawUnsafe(
-      `UPDATE Photo SET displayedCount = displayedCount + 1, sortOrder = random() WHERE id IN (${ids})`
-    );
-
-    const portrait = photos.filter(
-      (photo) => photo.orientation === Orientation.PORTRAIT
-    );
-    const landscape = photos.filter(
-      (photo) => photo.orientation === Orientation.LANDSCAPE
-    );
-
-    const photoSlides: any[] = [];
-
-    landscape.forEach((landscapePhoto) => {
-      photoSlides.push({
-        orientation: Orientation.LANDSCAPE,
-        photos: [landscapePhoto],
+      landscape.forEach((landscapePhoto) => {
+        photoSlides.push({
+          orientation: Orientation.LANDSCAPE,
+          photos: [landscapePhoto],
+        });
       });
-    });
-    portrait.forEach((_, i) => {
-      const firstIndex = i * 2;
-      const secondIndex = firstIndex + 1;
-      if (!portrait[secondIndex]) return;
+      portrait.forEach((_, i) => {
+        const firstIndex = i * 2;
+        const secondIndex = firstIndex + 1;
+        if (!portrait[secondIndex]) return;
 
-      photoSlides.push({
-        orientation: Orientation.PORTRAIT,
-        photos: [portrait[firstIndex], portrait[secondIndex]],
+        photoSlides.push({
+          orientation: Orientation.PORTRAIT,
+          photos: [portrait[firstIndex], portrait[secondIndex]],
+        });
       });
-    });
 
-    res.status(HttpStatus.OK).json(shuffle(photoSlides));
+      res.status(HttpStatus.OK).json(shuffle(photoSlides));
+    } catch (e) {
+      console.error(e);
+      res.status(HttpStatus.OK).json([]);
+    }
   }
 
   async POST(_req: NextApiRequest, res: NextApiResponse<PostData>) {

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { minutes as minutesFn, seconds as secondsFn } from "../utils/dates";
 
 type Unit = "minute" | "minutes" | "seconds";
 
@@ -11,8 +12,8 @@ export const useEvery = (
   const m = minutes || minute;
 
   let interval: number = 0;
-  if (m) interval = m * 60 * 1000;
-  if (s) interval = s * 1000;
+  if (m) interval = minutesFn(m);
+  if (s) interval = secondsFn(s);
 
   useEffect(() => {
     fn();

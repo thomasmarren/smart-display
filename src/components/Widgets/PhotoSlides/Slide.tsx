@@ -71,8 +71,9 @@ export const Slide = ({
               color: "white",
               fontSize: 18,
               fontFamily: "Lato",
+              fontWeight: 700,
               textShadow: "#000 2px 1px 2px",
-              opacity: 0.8,
+              opacity: 0.9,
             }}
           >
             {`${photo.album.title} • ${new Date(

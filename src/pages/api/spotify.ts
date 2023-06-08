@@ -35,11 +35,12 @@ export class SpotifyController extends Controller {
       });
       const tokens = await response.json();
       accessToken = tokens.access_token as string;
+
       await prisma.spotifyToken.update({
         where: { id: token.id },
         data: {
           accessToken,
-          expiryDate: new Date().getTime() + tokens.expires_in,
+          expiryDate: this.newExpiryDate(tokens.expires_in),
         },
       });
     }
@@ -89,6 +90,10 @@ export class SpotifyController extends Controller {
       track: currentlyPlaying.item.name,
       albumUrl: albumUrl.url,
     });
+  }
+
+  private newExpiryDate(expiresIn: number) {
+    return new Date().getTime() + expiresIn * 1000;
   }
 }
 

@@ -11,16 +11,14 @@ export class SpotifyAuthController extends Controller {
   async GET(req: NextApiRequest, res: NextApiResponse<GetData>) {
     try {
       if (!req.query.code) {
-        const googleToken = await prisma.spotifyToken.findFirst({
+        const spotifyToken = await prisma.spotifyToken.findFirst({
           where: { id: 1 },
         });
 
         let isAuthenticated = false;
-        if (googleToken) isAuthenticated = true;
+        if (spotifyToken) isAuthenticated = true;
         return res.status(200).send({ isAuthenticated });
       }
-
-      console.log(req.query);
 
       const code = req.query.code || null;
       const state = req.query.state || null;
@@ -48,12 +46,12 @@ export class SpotifyAuthController extends Controller {
         create: {
           accessToken: tokens.access_token as string,
           refreshToken: tokens.refresh_token as string,
-          expiryDate: (new Date() + tokens.expires_in).getTime() as number,
+          expiryDate: (new Date().getTime() + tokens.expires_in) as number,
         },
         update: {
           accessToken: tokens.access_token as string,
           refreshToken: tokens.refresh_token as string,
-          expiryDate: (new Date() + tokens.expires_in).getTime() as number,
+          expiryDate: (new Date().getTime() + tokens.expires_in) as number,
         },
         where: {
           id: 1,

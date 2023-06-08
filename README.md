@@ -34,7 +34,7 @@ yarn dev
 ## Credits:
 
 - Weather provided by [Open-Meteo](https://open-meteo.com/)
-- Icons provided by [amCharts](https://www.amcharts.com/)
+- Icons provided by [amCharts](https://www.amcharts.com/free-animated-svg-weather-icons)
 
 ## License
 

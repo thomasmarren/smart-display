@@ -1,12 +1,16 @@
+import { usePhotos } from "@/hooks/usePhotos";
+import { seconds } from "@/utils/dates";
 import { useEffect, useState } from "react";
-import { usePhotos } from "../../hooks/usePhotos";
 import { Slide } from "./Slide";
 
 export const PhotoSlides = ({
+  onNext,
   slideshowSpeedSeconds,
 }: {
+  onNext: () => void;
   slideshowSpeedSeconds: number;
 }) => {
+  const [cycles, setCycles] = useState(0);
   const [index, setIndex] = useState(0);
 
   const { data: photoSlides, refresh } = usePhotos();
@@ -17,19 +21,23 @@ export const PhotoSlides = ({
 
       const newIndex = index + 1;
 
+      if (cycles === 3) {
+        onNext();
+        return;
+      }
+
       if (newIndex + 2 > photoSlides.length) {
+        setCycles(cycles + 1);
         refresh();
         setIndex(0);
         return;
       }
 
       setIndex(newIndex);
-    }, slideshowSpeedSeconds * 1000);
+    }, seconds(slideshowSpeedSeconds));
 
     return () => clearInterval(interval);
   });
-
-  // return null;
 
   if (!photoSlides) return null;
 

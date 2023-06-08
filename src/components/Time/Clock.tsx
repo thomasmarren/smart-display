@@ -16,7 +16,6 @@ export const Clock = ({ style = {} }) => {
   return (
     <div
       style={{
-        lineHeight: "50px",
         fontSize: "5em",
         ...style,
       }}
