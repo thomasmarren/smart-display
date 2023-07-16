@@ -1,4 +1,5 @@
 import { useCurrentWidget, Widgets } from "@/contexts/WidgetProvider";
+import { todayDate } from "@/utils/dates";
 import { Weather } from "../Weather";
 import { Clock } from "./Clock";
 
@@ -22,12 +23,7 @@ export const Time = () => {
       }}
     >
       <div style={{ textAlign: "end", marginRight: 5, fontSize: 18 }}>
-        {new Date().toLocaleDateString("en-us", {
-          weekday: "short",
-          month: "long",
-          day: "numeric",
-          timeZone: "UTC",
-        })}
+        {todayDate()}
       </div>
       <Clock style={{ justifySelf: "flex-end", marginBottom: -18 }} />
       <Weather />

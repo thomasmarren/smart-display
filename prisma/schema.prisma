@@ -14,6 +14,7 @@ model Album {
   id          String   @id
   title       String
   show        Boolean
+  refreshable Boolean  @default(false)
   lastRefresh DateTime @default(now())
 
   createdAt DateTime @default(now())

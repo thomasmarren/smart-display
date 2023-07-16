@@ -1,8 +1,7 @@
 import { Clock as ClockComponent } from "@/components/Time/Clock";
-import { WeatherIcon } from "@/components/Weather/icons";
-import { useEcobee } from "@/hooks/useEcobee";
+import { WaterDrop, WeatherIcon } from "@/components/Weather/icons";
 import { useWeather, WeatherCode } from "@/hooks/useWeather";
-import { isNight, seconds } from "@/utils/dates";
+import { isNight, seconds, todayDate } from "@/utils/dates";
 import { animated, useSpring, useSprings } from "@react-spring/web";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -74,16 +73,7 @@ const Current = styled(animated.div)`
   height: 35%;
 `;
 
-const DateC = styled((props) => (
-  <div {...props}>
-    {new Date().toLocaleDateString("en-us", {
-      weekday: "short",
-      month: "long",
-      day: "numeric",
-      timeZone: "UTC",
-    })}
-  </div>
-))`
+const DateC = styled((props) => <div {...props}>{todayDate()}</div>)`
   color: #fff;
   font-family: Roboto;
   font-size: 32px;
@@ -111,10 +101,9 @@ const Daily = ({ base, daily }: { base: {}; daily: any }) => {
       style={{
         display: "flex",
         alignItems: "center",
-        lineHeight: "5px",
       }}
     >
-      <div style={{ fontSize: "24px", marginRight: "50px" }}>
+      <div style={{ fontSize: "24px", marginRight: "50px", width: "150px" }}>
         {new Date(day).toLocaleDateString("en-US", {
           weekday: "short",
           month: "2-digit",
@@ -123,17 +112,29 @@ const Daily = ({ base, daily }: { base: {}; daily: any }) => {
         })}
       </div>
       <div style={{ display: "flex", alignItems: "center" }}>
-        <div>
+        <div style={{ width: "70px" }}>
           <WeatherIcon icon={daily[day].icon} />
         </div>
-        <div style={{ fontSize: "30px" }}>{daily[day].max}°</div>
-        <div style={{ fontSize: "30px" }}>&nbsp;/&nbsp;</div>
+        <div style={{ fontSize: "30px", marginRight: "15px", width: "50px" }}>
+          {daily[day].max}°
+        </div>
         <div
           style={{
-            fontSize: "30px",
+            display: "flex",
+            alignItems: "center",
+            width: "70px",
           }}
         >
-          {daily[day].min}°
+          {daily[day].precipitation_probability > 10 && (
+            <>
+              <div style={{ width: "18px", marginRight: "5px" }}>
+                <WaterDrop />
+              </div>
+              <span style={{ fontSize: "25px" }}>
+                {daily[day].precipitation_probability}%
+              </span>
+            </>
+          )}
         </div>
       </div>
     </div>
@@ -174,11 +175,10 @@ export const Forecast = ({ onNext }: { onNext: () => void }) => {
   const [forecastView, setForecastView] = useState("hourly");
   const {
     dailyForecast: daily,
-    current: { max, min, icon, temperature },
+    current: { max, min, icon, temperature, precipitation_probability },
     hourlyForecast: hourly,
     loading,
   } = useWeather();
-  const { data: thermostat } = useEcobee();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -186,10 +186,8 @@ export const Forecast = ({ onNext }: { onNext: () => void }) => {
         onNext();
         return;
       }
-
       setForecastView("daily");
     }, seconds(15));
-
     return () => clearTimeout(timeout);
   });
 
@@ -217,17 +215,53 @@ export const Forecast = ({ onNext }: { onNext: () => void }) => {
         alignItems: "center",
       }}
     >
-      <div style={{ fontSize: "24px", marginRight: "50px" }}>
+      <div style={{ fontSize: "24px", marginRight: "50px", width: "100px" }}>
         {new Date(hour).toLocaleTimeString("en-US", {
           hour: "numeric",
           hour12: true,
         })}
       </div>
       <div style={{ display: "flex", alignItems: "center" }}>
-        <div>
+        <div
+          style={{
+            width: "64px",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           <WeatherIcon icon={hourly[hour].icon} />
         </div>
-        <div style={{ fontSize: "30px" }}>{hourly[hour].temperature}°</div>
+        <div
+          style={{
+            fontSize: "30px",
+            marginRight: "5px",
+            display: "flex",
+            justifyContent: "center",
+            width: "50px",
+          }}
+        >
+          {hourly[hour].temperature}°
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            minWidth: "50px",
+          }}
+        >
+          {hourly[hour].precipitation_probability > 10 && (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div style={{ width: "18px", marginRight: "5px" }}>
+                <WaterDrop />
+              </div>
+              <span style={{ fontSize: "20px" }}>
+                {hourly[hour].precipitation_probability}%
+              </span>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   ));
@@ -243,7 +277,7 @@ export const Forecast = ({ onNext }: { onNext: () => void }) => {
           style={{
             display: "flex",
             alignItems: "center",
-            fontSize: "100px",
+            fontSize: "80px",
             textShadow: "rgba(0, 0, 0, 0.4) 1px 1px 10px",
             lineHeight: "90px",
             marginBottom: "10px",
@@ -252,8 +286,23 @@ export const Forecast = ({ onNext }: { onNext: () => void }) => {
           <WeatherIcon icon={icon} scale={2} />
           <span style={{ margin: "0 25px" }}>{temperature}°</span>
         </div>
-        <div style={{ fontSize: "30px" }}>
+        <div style={{ fontSize: "25px", marginBottom: "10px" }}>
           L: {min}° H: {max}°
+        </div>
+        <div
+          style={{ fontSize: "25px", display: "flex", alignItems: "center" }}
+        >
+          <div
+            style={{
+              height: "24px",
+              width: "24px",
+              display: "flex",
+              marginRight: "5px",
+            }}
+          >
+            <WaterDrop />
+          </div>
+          <span>{precipitation_probability}%</span>
         </div>
       </Current>
       {forecastView === "hourly" && (
@@ -262,7 +311,7 @@ export const Forecast = ({ onNext }: { onNext: () => void }) => {
             display: "flex",
             alignItems: "center",
             height: "65%",
-            padding: "0 150px",
+            padding: "0 100px",
           }}
         >
           <Container>

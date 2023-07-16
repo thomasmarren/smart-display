@@ -7,6 +7,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 export type GetData = Holiday[];
 export type PostData = Holiday[];
+type PutData = { message: string };
 export type HolidaysControllerData = GetData;
 
 export class HolidaysController extends Controller {
@@ -27,6 +28,23 @@ export class HolidaysController extends Controller {
       holidays.push(holiday);
     }
     res.status(HttpStatus.OK).json(holidays);
+  }
+
+  async PUT(req: NextApiRequest, res: NextApiResponse<PutData>) {
+    const {
+      query: { id },
+      body,
+    } = req;
+
+    const intId = parseInt(id as string);
+    const holiday = await prisma.holiday.update({
+      where: { id: intId },
+      data: body,
+    });
+
+    res.status(HttpStatus.OK).json({
+      message: `Updated holiday ${holiday.name} with ${JSON.stringify(body)}`,
+    });
   }
 }
 

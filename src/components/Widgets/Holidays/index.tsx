@@ -16,7 +16,7 @@ export const Holidays = ({ onNext }: { onNext: () => void }) => {
 
   const daysUntil = (date: Date) => {
     const diffInMilli = date.getTime() - today.getTime();
-    return diffInMilli / (1000 * 3600 * 24);
+    return Math.floor(diffInMilli / (1000 * 3600 * 24));
   };
 
   const sorted = holidays
@@ -57,7 +57,14 @@ export const Holidays = ({ onNext }: { onNext: () => void }) => {
       ) : (
         <>
           <h1 style={{ fontSize: "55px", margin: "30px 0 70px" }}>Upcoming</h1>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-evenly",
+            }}
+          >
             <div>
               {sorted.slice(0, 2).map((holiday) => (
                 <div

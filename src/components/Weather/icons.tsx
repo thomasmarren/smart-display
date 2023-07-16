@@ -24,7 +24,7 @@ export const Overcast = ({ scale = 1 }: { scale?: number }) => {
           </feMerge>
         </filter>
       </defs>
-      <g filter="url(#blur)" id="cloudy">
+      <g id="cloudy">
         <g transform="translate(20,10)">
           <g className="am-weather-cloud-1">
             <path
@@ -61,20 +61,7 @@ export const PartlyCloudy = styled((props) => {
       viewBox="0 0 64 64"
       transform={`scale(${props.scale})`}
     >
-      <defs>
-        <filter id="blur" width="200%" height="200%">
-          <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
-          <feOffset dx="0" dy="4" result="offsetblur" />
-          {/* <feComponentTransfer>
-            <feFuncA type="linear" slope="0.05" />
-          </feComponentTransfer> */}
-          <feMerge>
-            <feMergeNode />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
-      <g filter="url(#blur)" id="cloudy-day-1">
+      <g id="cloudy-day-1">
         <g transform="translate(20,10)">
           <g transform="translate(0,16)">
             <g className="am-weather-sun">
@@ -346,7 +333,7 @@ export const Sunny = ({ scale = 1 }: { scale?: number }) => {
           </feMerge>
         </filter>
       </defs>
-      <g filter="url(#blur)" id="day">
+      <g id="day">
         <g transform="translate(32,32)">
           <g className="am-weather-sun am-weather-sun-shiny am-weather-easing-ease-in-out">
             <g>
@@ -491,7 +478,7 @@ export const Night = ({ scale = 1 }: { scale?: number }) => {
           </feMerge>
         </filter>
       </defs>
-      <g filter="url(#blur)" id="night">
+      <g id="night">
         <g transform="translate(20,20)">
           <g className="am-weather-moon-star-1">
             <polygon
@@ -525,6 +512,242 @@ export const Night = ({ scale = 1 }: { scale?: number }) => {
   );
 };
 
+export const Rain = ({ scale = 1 }: { scale?: number }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      version="1.1"
+      width="64"
+      height="64"
+      viewBox="0 0 64 64"
+      transform={`scale(${scale})`}
+    >
+      <g id="rainy-6">
+        <g transform="translate(20,10)">
+          <g>
+            <path
+              d="M47.7,35.4c0-4.6-3.7-8.2-8.2-8.2c-1,0-1.9,0.2-2.8,0.5c-0.3-3.4-3.1-6.2-6.6-6.2c-3.7,0-6.7,3-6.7,6.7c0,0.8,0.2,1.6,0.4,2.3    c-0.3-0.1-0.7-0.1-1-0.1c-3.7,0-6.7,3-6.7,6.7c0,3.6,2.9,6.6,6.5,6.7l17.2,0C44.2,43.3,47.7,39.8,47.7,35.4z"
+              fill="#57A0EE"
+              stroke="white"
+              stroke-linejoin="round"
+              stroke-width="1.2"
+              transform="translate(-20,-11)"
+            />
+          </g>
+        </g>
+        <g transform="translate(31,46), rotate(10)">
+          <line
+            fill="none"
+            stroke="#FFF"
+            stroke-dasharray="4,4"
+            stroke-linecap="round"
+            stroke-width="2"
+            transform="translate(-4,1)"
+            x1="0"
+            x2="0"
+            y1="0"
+            y2="8"
+          />
+          <line
+            fill="none"
+            stroke="#FFF"
+            stroke-dasharray="4,4"
+            stroke-linecap="round"
+            stroke-width="2"
+            transform="translate(0,-1)"
+            x1="0"
+            x2="0"
+            y1="0"
+            y2="8"
+          />
+          <line
+            fill="none"
+            stroke="#FFF"
+            stroke-dasharray="4,4"
+            stroke-linecap="round"
+            stroke-width="2"
+            transform="translate(4,0)"
+            x1="0"
+            x2="0"
+            y1="0"
+            y2="8"
+          />
+        </g>
+      </g>
+    </svg>
+  );
+};
+
+export const LightRain = ({ scale = 1 }: { scale?: number }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      version="1.1"
+      width="64"
+      height="64"
+      viewBox="0 0 64 64"
+      transform={`scale(${scale})`}
+    >
+      <g id="rainy-3">
+        <g transform="translate(20,10)">
+          <g transform="translate(0,16)">
+            <g>
+              <g>
+                <line
+                  fill="none"
+                  stroke="orange"
+                  stroke-linecap="round"
+                  stroke-width="2"
+                  transform="translate(0,9)"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="3"
+                />
+              </g>
+              <g transform="rotate(45)">
+                <line
+                  fill="none"
+                  stroke="orange"
+                  stroke-linecap="round"
+                  stroke-width="2"
+                  transform="translate(0,9)"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="3"
+                />
+              </g>
+              <g transform="rotate(90)">
+                <line
+                  fill="none"
+                  stroke="orange"
+                  stroke-linecap="round"
+                  stroke-width="2"
+                  transform="translate(0,9)"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="3"
+                />
+              </g>
+              <g transform="rotate(135)">
+                <line
+                  fill="none"
+                  stroke="orange"
+                  stroke-linecap="round"
+                  stroke-width="2"
+                  transform="translate(0,9)"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="3"
+                />
+              </g>
+              <g transform="rotate(180)">
+                <line
+                  fill="none"
+                  stroke="orange"
+                  stroke-linecap="round"
+                  stroke-width="2"
+                  transform="translate(0,9)"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="3"
+                />
+              </g>
+              <g transform="rotate(225)">
+                <line
+                  fill="none"
+                  stroke="orange"
+                  stroke-linecap="round"
+                  stroke-width="2"
+                  transform="translate(0,9)"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="3"
+                />
+              </g>
+              <g transform="rotate(270)">
+                <line
+                  fill="none"
+                  stroke="orange"
+                  stroke-linecap="round"
+                  stroke-width="2"
+                  transform="translate(0,9)"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="3"
+                />
+              </g>
+              <g transform="rotate(315)">
+                <line
+                  fill="none"
+                  stroke="orange"
+                  stroke-linecap="round"
+                  stroke-width="2"
+                  transform="translate(0,9)"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="3"
+                />
+              </g>
+            </g>
+            <circle
+              cx="0"
+              cy="0"
+              fill="orange"
+              r="5"
+              stroke="orange"
+              stroke-width="2"
+            />
+          </g>
+          <g>
+            <path
+              d="M47.7,35.4c0-4.6-3.7-8.2-8.2-8.2c-1,0-1.9,0.2-2.8,0.5c-0.3-3.4-3.1-6.2-6.6-6.2c-3.7,0-6.7,3-6.7,6.7c0,0.8,0.2,1.6,0.4,2.3    c-0.3-0.1-0.7-0.1-1-0.1c-3.7,0-6.7,3-6.7,6.7c0,3.6,2.9,6.6,6.5,6.7l17.2,0C44.2,43.3,47.7,39.8,47.7,35.4z"
+              fill="#57A0EE"
+              stroke="white"
+              stroke-linejoin="round"
+              stroke-width="1.2"
+              transform="translate(-20,-11)"
+            />
+          </g>
+        </g>
+        <g transform="translate(34,46), rotate(10)">
+          <line
+            fill="none"
+            stroke="#FFF"
+            stroke-dasharray="4,7"
+            stroke-linecap="round"
+            stroke-width="2"
+            transform="translate(-6,1)"
+            x1="0"
+            x2="0"
+            y1="0"
+            y2="8"
+          />
+          <line
+            fill="none"
+            stroke="#FFF"
+            stroke-dasharray="4,7"
+            stroke-linecap="round"
+            stroke-width="2"
+            transform="translate(0,-1)"
+            x1="0"
+            x2="0"
+            y1="0"
+            y2="8"
+          />
+        </g>
+      </g>
+    </svg>
+  );
+};
+
 export const WeatherIcon = ({
   icon,
   scale,
@@ -541,6 +764,10 @@ export const WeatherIcon = ({
       return <Sunny scale={scale} />;
     case WeatherCode.NIGHT:
       return <Night scale={scale} />;
+    case WeatherCode.RAIN:
+      return <Rain scale={scale} />;
+    case WeatherCode.LIGHT_RAIN:
+      return <LightRain scale={scale} />;
     default:
       return <PartlyCloudy scale={scale} />;
   }
@@ -614,6 +841,22 @@ export const Flame = ({ scale = 1 }) => {
         d="m16 6-.44.55C14.38 8.02 12 7.19 12 5.3V2S4 6 4 13c0 2.92 1.56 5.47 3.89 6.86-.56-.79-.89-1.76-.89-2.8 0-1.32.52-2.56 1.47-3.5L12 10.1l3.53 3.47c.95.93 1.47 2.17 1.47 3.5 0 1.02-.31 1.96-.85 2.75 1.89-1.15 3.29-3.06 3.71-5.3.66-3.55-1.07-6.9-3.86-8.52z"
         fill="#FFA52C"
       />
+    </svg>
+  );
+};
+
+export const WaterDrop = ({ scale = 1 }) => {
+  return (
+    <svg
+      focusable="false"
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      transform={`scale(${scale})`}
+    >
+      <path
+        fill="#FFF"
+        d="M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2c0-3.32-2.67-7.25-8-11.8zM7.83 14c.37 0 .67.26.74.62.41 2.22 2.28 2.98 3.64 2.87.43-.02.79.32.79.75 0 .4-.32.73-.72.75-2.13.13-4.62-1.09-5.19-4.12-.08-.45.28-.87.74-.87z"
+      ></path>
     </svg>
   );
 };

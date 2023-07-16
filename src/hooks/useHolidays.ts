@@ -7,7 +7,8 @@ const currentMonth = () => new Date().getMonth();
 const currentDay = () => new Date().getDate();
 const currentYear = today().getFullYear();
 const getDate = (date: Date) =>
-  date.getMonth() <= currentMonth() && date.getDate() < currentDay()
+  date.getMonth() <= currentMonth() ||
+  (date.getMonth() === currentMonth() && date.getDate() < currentDay())
     ? new Date(date.setFullYear(currentYear + 1))
     : new Date(date.setFullYear(currentYear));
 

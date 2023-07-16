@@ -30,10 +30,16 @@ export const Weather = () => {
         fontSize: "1.8em",
       }}
     >
-      <WeatherIcon icon={icon} scale={thermostat.running ? 2.8 : 1} />
-      <span style={{ marginLeft: "-10px" }}>{temperature}°</span>
-      {homeIcon}
-      <span style={{ marginLeft: "-10px" }}>{thermostat.temperature}°</span>
+      <div style={{ width: "50px", marginRight: "5px" }}>
+        <WeatherIcon icon={icon} scale={1} />
+      </div>
+      <div style={{ width: "50px" }}>
+        <span>{temperature}°</span>
+      </div>
+      <div style={{ width: "50px", marginRight: "5px" }}>{homeIcon}</div>
+      <div style={{ width: "50px" }}>
+        <span>{thermostat.temperature}°</span>
+      </div>
     </div>
   );
 };

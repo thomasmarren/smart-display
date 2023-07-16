@@ -39,3 +39,8 @@ prisma/dev.db-journal
 next-env.d.ts
 
 transfer.sh
+
+# exclude everything
+cron
+tmp/*
+!tmp/.gitkeep 

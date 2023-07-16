@@ -2,10 +2,19 @@ import { isNight, minutes } from "@/utils/dates";
 import { useEffect, useState } from "react";
 
 type DailyForecast = {
-  [key: string]: { max: number; min: number; icon: WeatherCode };
+  [key: string]: {
+    max: number;
+    min: number;
+    icon: WeatherCode;
+    precipitation_probability: number;
+  };
 };
 type HourlyForecast = {
-  [key: string]: { temperature: number; icon: WeatherCode };
+  [key: string]: {
+    temperature: number;
+    icon: WeatherCode;
+    precipitation_probability: number;
+  };
 };
 
 type OpenMeteoForecast = {
@@ -19,11 +28,13 @@ type OpenMeteoForecast = {
     temperature_2m: number[];
     time: string[];
     weathercode: number[];
+    precipitation_probability: number[];
   };
   daily: {
     temperature_2m_max: number[];
     temperature_2m_min: number[];
     time: string[];
+    precipitation_probability_max: number[];
   };
 };
 
@@ -32,6 +43,8 @@ export enum WeatherCode {
   PARTLY_CLOUDY = "partly_cloudy",
   OVERCAST = "overcast",
   NIGHT = "night",
+  RAIN = "rain",
+  LIGHT_RAIN = "light_rain",
 }
 
 const ICONS: { [code: string]: WeatherCode } = {
@@ -39,6 +52,12 @@ const ICONS: { [code: string]: WeatherCode } = {
   ["1"]: WeatherCode.SUNNY,
   ["2"]: WeatherCode.PARTLY_CLOUDY,
   ["3"]: WeatherCode.OVERCAST,
+  ["61"]: WeatherCode.LIGHT_RAIN,
+  ["63"]: WeatherCode.LIGHT_RAIN,
+  ["65"]: WeatherCode.LIGHT_RAIN,
+  ["80"]: WeatherCode.RAIN,
+  ["81"]: WeatherCode.RAIN,
+  ["82"]: WeatherCode.RAIN,
 };
 
 const params = () => {
@@ -63,8 +82,9 @@ const params = () => {
     start_date: date,
     end_date: endDate,
     timezone: process.env.NEXT_PUBLIC_TIMEZONE as string,
-    hourly: "temperature_2m,weathercode",
-    daily: "temperature_2m_max,temperature_2m_min,weathercode",
+    hourly: "temperature_2m,weathercode,precipitation_probability",
+    daily:
+      "temperature_2m_max,temperature_2m_min,weathercode,precipitation_probability_max",
   }).toString();
 };
 
@@ -79,6 +99,7 @@ export const useWeather = ({
       min: number;
       icon: WeatherCode;
       temperature: number;
+      precipitation_probability: number;
     };
     loading: boolean;
   }>({
@@ -87,6 +108,7 @@ export const useWeather = ({
       min: 0,
       icon: WeatherCode.SUNNY,
       temperature: 0,
+      precipitation_probability: 0,
     },
     hourlyForecast: {},
     dailyForecast: {},
@@ -110,6 +132,7 @@ export const useWeather = ({
           icon: isNight(new Date(date))
             ? WeatherCode.NIGHT
             : ICONS[data.hourly.weathercode[i]],
+          precipitation_probability: data.hourly.precipitation_probability[i],
         };
       });
 
@@ -121,6 +144,9 @@ export const useWeather = ({
           max: Math.round(data.daily.temperature_2m_max[i]),
           min: Math.round(data.daily.temperature_2m_min[i]),
           icon: ICONS[data.hourly.weathercode[i]],
+          precipitation_probability: Math.round(
+            data.daily.precipitation_probability_max[i]
+          ),
         };
       });
 
@@ -131,6 +157,8 @@ export const useWeather = ({
           min: Math.round(data.daily.temperature_2m_min[0]),
           icon: ICONS[data.current_weather.weathercode],
           temperature: Math.round(data.current_weather.temperature),
+          precipitation_probability:
+            data.daily.precipitation_probability_max[0],
         },
         dailyForecast,
         loading: false,

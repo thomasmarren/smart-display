@@ -9,3 +9,11 @@ export const minutes = (x: number) => x * 60 * 1000;
 
 export const isNight = (date = new Date()) =>
   date.getHours() >= 20 || date.getHours() <= 6;
+
+export const todayDate = () => {
+  return new Date().toLocaleDateString("en-us", {
+    weekday: "short",
+    month: "long",
+    day: "numeric",
+  });
+};

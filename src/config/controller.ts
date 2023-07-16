@@ -14,6 +14,12 @@ export class Controller {
       .json({ message: `${req.method} - ${req.url} not implemented.` });
   }
 
+  async PUT(req: NextApiRequest, res: NextApiResponse<any>) {
+    return res
+      .status(HttpStatus.NOT_FOUND)
+      .json({ message: `${req.method} - ${req.url} not implemented.` });
+  }
+
   async DELETE(req: NextApiRequest, res: NextApiResponse<any>) {
     return res
       .status(HttpStatus.NOT_FOUND)

@@ -70,7 +70,7 @@ export class GooglePhotos {
 
   public async albums(): Promise<GooglePhotosAlbumResponse> {
     const response = await fetch(
-      `https://photoslibrary.googleapis.com/v1/albums`,
+      `https://photoslibrary.googleapis.com/v1/albums?pageSize=50`,
       {
         headers: {
           Authorization: `Bearer ${this.accessToken}`,

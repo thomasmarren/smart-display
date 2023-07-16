@@ -1,6 +1,7 @@
 import { GooglePhotos } from "@/clients/googlePhotos";
 import { Controller } from "@/config/controller";
 import prisma from "@/config/prisma";
+import { Prisma } from "@prisma/client";
 import { routeHandler } from "@/config/routeHandler";
 import { HttpStatus } from "@/constants";
 import { PhotoService } from "@/services/photoService";
@@ -94,15 +95,22 @@ export class PhotosController extends Controller {
     }
   }
 
-  async POST(_req: NextApiRequest, res: NextApiResponse<PostData>) {
+  async POST(req: NextApiRequest, res: NextApiResponse<PostData>) {
     try {
-      const album = await prisma.album.findFirst({
-        where: {
-          show: true,
+      const { albumId } = req.body;
+      let where: Prisma.AlbumWhereInput = {};
+      if (albumId) {
+        where = { id: albumId };
+      } else {
+        where = {
+          refreshable: true,
           lastRefresh: {
             lt: hoursAgo(24),
           },
-        },
+        };
+      }
+      const album = await prisma.album.findFirst({
+        where,
         include: {
           Photo: true,
         },
@@ -133,6 +141,15 @@ export class PhotosController extends Controller {
         where: { id: album.id },
       });
 
+      await prisma.$executeRawUnsafe(
+        `UPDATE Photo SET displayedCount = 0, sortOrder = random()`
+      );
+
+      console.log(
+        `Created ${totalPhotosCount - currentPhotosCount} photos from ${
+          album.title
+        } album.`
+      );
       res.status(HttpStatus.CREATED).json({
         message: `Created ${
           totalPhotosCount - currentPhotosCount
