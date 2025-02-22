@@ -3,7 +3,6 @@ import { useWeather } from "@/hooks/useWeather";
 import { Flame, Home, Snowflake, WeatherIcon } from "./icons";
 
 export const Weather = () => {
-  console.debug("Rendering Weather");
   const {
     current: { icon, temperature },
     loading,

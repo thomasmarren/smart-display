@@ -37,8 +37,6 @@ export class EcobeeAuthController extends Controller {
   }
 
   async POST(req: NextApiRequest, res: NextApiResponse<PostData>) {
-    console.log(req.body);
-
     try {
       if (!req.body.code) {
         const ecobeeToken = await prisma.ecobeeToken.findFirst({

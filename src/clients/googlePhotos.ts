@@ -1,12 +1,11 @@
 import prisma from "@/config/prisma";
 import { Album, Photo } from "@prisma/client";
 import { google } from "googleapis";
-const qs = require("qs");
 
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_AUTH_CLIENT_ID,
   process.env.GOOGLE_AUTH_CLIENT_SECRET,
-  "http://localhost:3000/google_callback"
+  `${process.env.API_URL}/google_callback`
 );
 
 type GooglePhotosAlbum = {
@@ -46,7 +45,7 @@ export class GooglePhotos {
   }
 
   public async connect() {
-    const {
+    let {
       accessToken: googleAccessToken,
       expiryDate,
       refreshToken,
@@ -56,11 +55,24 @@ export class GooglePhotos {
 
     let accessToken = googleAccessToken;
     if (new Date(Number(expiryDate)) < new Date()) {
+      console.log(
+        `Google access token expired at ${new Date(
+          Number(expiryDate)
+        ).toLocaleString()}. Refreshing...`
+      );
       oauth2Client.setCredentials({
         refresh_token: refreshToken,
       });
       const response = await oauth2Client.refreshAccessToken();
       accessToken = response.credentials.access_token as string;
+      expiryDate = response.credentials.expiry_date as unknown as bigint;
+      await prisma.googleToken.update({
+        where: { id: 1 },
+        data: {
+          accessToken,
+          expiryDate,
+        },
+      });
     }
 
     this.accessToken = accessToken;

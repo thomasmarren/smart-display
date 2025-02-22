@@ -30,7 +30,7 @@ export class SpotifyAuthController extends Controller {
         method: "POST",
         body: new URLSearchParams({
           code: code as string,
-          redirect_uri: "http://localhost:3000/spotify_callback",
+          redirect_uri: `${process.env.API_URL}/spotify_callback`,
           grant_type: "authorization_code",
         }).toString(),
         headers: {
@@ -75,7 +75,7 @@ export class SpotifyAuthController extends Controller {
         response_type: "code",
         client_id: process.env.SPOTIFY_CLIENT_ID as string,
         scope: scope,
-        redirect_uri: "http://localhost:3000/spotify_callback",
+        redirect_uri: `${process.env.API_URL}/spotify_callback`,
         state: state,
       }).toString();
 

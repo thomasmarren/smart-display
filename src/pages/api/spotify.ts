@@ -80,6 +80,16 @@ export class SpotifyController extends Controller {
       is_playing: boolean;
     } = await currentlyPlayingResponse.json();
 
+    if (!currentlyPlaying.item) {
+      return res.status(HttpStatus.OK).json({
+        isPlaying: false,
+        album: null,
+        artist: null,
+        track: null,
+        albumUrl: "",
+      });
+    }
+
     const albumUrl = currentlyPlaying.item.album.images.find(
       (image) => image.height === 300
     ) as { url: string };

@@ -1,14 +1,14 @@
 import { Controller } from "@/config/controller";
 import prisma from "@/config/prisma";
 import { routeHandler } from "@/config/routeHandler";
-import { PHOTOS_READ_ONLY } from "@/constants";
+import { CALENDAR_READ_ONLY, PHOTOS_READ_ONLY } from "@/constants";
 import { google } from "googleapis";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_AUTH_CLIENT_ID,
   process.env.GOOGLE_AUTH_CLIENT_SECRET,
-  "http://localhost:3000/google_callback"
+  `${process.env.API_URL}/google_callback`
 );
 
 type GetData =
@@ -58,7 +58,7 @@ export class GoogleAuthController extends Controller {
   async POST(_req: NextApiRequest, res: NextApiResponse<PostData>) {
     const url = oauth2Client.generateAuthUrl({
       access_type: "offline",
-      scope: PHOTOS_READ_ONLY,
+      scope: [PHOTOS_READ_ONLY, CALENDAR_READ_ONLY],
     });
 
     res.status(200).json({ url });

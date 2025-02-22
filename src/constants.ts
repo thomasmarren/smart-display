@@ -1,5 +1,7 @@
 export const PHOTOS_READ_ONLY =
   "https://www.googleapis.com/auth/photoslibrary.readonly";
+export const CALENDAR_READ_ONLY =
+  "https://www.googleapis.com/auth/calendar.readonly";
 
 export const ALBUMS = ["Bolt"];
 

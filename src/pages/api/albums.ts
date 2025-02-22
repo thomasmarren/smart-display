@@ -51,7 +51,12 @@ export class AlbumsController extends Controller {
 
     const album = await prisma.album.update({
       where: { id: id as string },
-      data: body,
+      data: {
+        ...body,
+        ...(body.lastRefresh
+          ? { lastRefresh: new Date(body.lastRefresh) }
+          : {}),
+      },
     });
 
     res.status(HttpStatus.OK).json({

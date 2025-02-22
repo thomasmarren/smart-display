@@ -77,8 +77,6 @@ const params = () => {
     current_weather: "true",
     temperature_unit: "fahrenheit",
     timeformat: "iso8601",
-    past_days: "0",
-    forecast_days: "7",
     start_date: date,
     end_date: endDate,
     timezone: process.env.NEXT_PUBLIC_TIMEZONE as string,
@@ -122,6 +120,8 @@ export const useWeather = ({
       );
 
       const data: OpenMeteoForecast = await response.json();
+
+      if (!data.hourly || !data.daily) return;
 
       const hourlyForecast: HourlyForecast = {};
       data.hourly.time.forEach((date, i) => {

@@ -1,7 +1,7 @@
 import { HttpMethod } from "@/constants";
 import { useEffect, useState } from "react";
 
-export const useIsAuthenticated = () => {
+export const useIsAuthenticated = ({ returnUrl = false } = {}) => {
   const [authorizationUrl, setAuthorizationUrl] = useState();
   const [isAuthenticated, setIsAuthenticated] = useState(undefined);
 
@@ -18,7 +18,9 @@ export const useIsAuthenticated = () => {
   }, []);
 
   useEffect(() => {
-    if (isAuthenticated === undefined || isAuthenticated) return;
+    if (!returnUrl && (isAuthenticated === undefined || isAuthenticated)) {
+      return;
+    }
 
     const getUrl = async () => {
       try {

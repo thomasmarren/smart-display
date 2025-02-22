@@ -17,3 +17,9 @@ export const todayDate = () => {
     day: "numeric",
   });
 };
+
+export const daysUntil = (date: Date) => {
+  const diffInMilli =
+    date.getTime() - new Date(new Date().setHours(0, 0, 0, 0)).getTime();
+  return Math.floor(diffInMilli / (1000 * 3600 * 24));
+};

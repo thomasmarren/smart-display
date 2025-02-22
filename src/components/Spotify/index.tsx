@@ -25,7 +25,6 @@ const ArtistAlbum = styled.div`
 `;
 
 export const Spotify = () => {
-  console.debug("Rendering Spotify");
   const { data: currentlyPlaying } = useSpotify();
 
   if (!currentlyPlaying) return null;

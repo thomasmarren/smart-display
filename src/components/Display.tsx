@@ -37,9 +37,9 @@ export const Display = () => {
       <div
         style={{
           height: "100vh",
-          width: "100vw",
           display: "flex",
           backgroundColor: "black",
+          transform: "scaleY(.95)",
         }}
       >
         <Widgets />

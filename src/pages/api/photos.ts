@@ -141,9 +141,7 @@ export class PhotosController extends Controller {
         where: { id: album.id },
       });
 
-      await prisma.$executeRawUnsafe(
-        `UPDATE Photo SET displayedCount = 0, sortOrder = random()`
-      );
+      await prisma.$executeRawUnsafe(`UPDATE Photo SET sortOrder = random()`);
 
       console.log(
         `Created ${totalPhotosCount - currentPhotosCount} photos from ${
@@ -161,6 +159,21 @@ export class PhotosController extends Controller {
 
       res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
     }
+  }
+
+  async DELETE(req: NextApiRequest, res: NextApiResponse) {
+    const query = req.query;
+    const { count } = await prisma.photo.deleteMany(
+      query.albumId
+        ? {
+            where: { albumId: query.albumId as string },
+          }
+        : undefined
+    );
+
+    res.status(HttpStatus.OK).json({
+      message: `Deleted ${count} photos.`,
+    });
   }
 
   private randomPick(values: string[]) {

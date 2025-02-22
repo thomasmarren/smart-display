@@ -25,7 +25,6 @@ export const usePhotos = () => {
   }, [refreshDate]);
 
   const refresh = () => {
-    console.log("Refreshing photos");
     setRefreshDate(new Date());
   };
 
