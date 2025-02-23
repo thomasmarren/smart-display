@@ -97,7 +97,7 @@ export class PhotosController extends Controller {
 
   async POST(req: NextApiRequest, res: NextApiResponse<PostData>) {
     try {
-      const { albumId } = req.body;
+      const { albumId, nextPageToken: pageToken } = req.body;
       let where: Prisma.AlbumWhereInput = {};
       if (albumId) {
         where = { id: albumId };
@@ -131,6 +131,7 @@ export class PhotosController extends Controller {
       const { photos: albumPhotos, nextPageToken } =
         await PhotoService.createFromAlbum({
           albumId: album.id,
+          pageToken,
         });
 
       const totalPhotosCount = albumPhotos.length;
