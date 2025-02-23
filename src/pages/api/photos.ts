@@ -59,7 +59,7 @@ export class PhotosController extends Controller {
 
       const ids = photos.map((photo) => `'${photo.id}'`).join(",");
       await prisma.$executeRawUnsafe(
-        `UPDATE "Photo" SET displayedCount = displayedCount + 1, sortOrder = random() WHERE id IN (${ids})`
+        `UPDATE "Photo" SET "displayedCount" = "displayedCount" + 1, "sortOrder" = random() WHERE id IN (${ids})`
       );
 
       const portrait = photos.filter(
@@ -141,7 +141,9 @@ export class PhotosController extends Controller {
         where: { id: album.id },
       });
 
-      await prisma.$executeRawUnsafe(`UPDATE Photo SET sortOrder = random()`);
+      await prisma.$executeRawUnsafe(
+        `UPDATE "Photo" SET "sortOrder" = random()`
+      );
 
       console.log(
         `Created ${totalPhotosCount - currentPhotosCount} photos from ${
