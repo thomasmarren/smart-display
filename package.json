@@ -13,7 +13,7 @@
     "db:migrate": "yarn prisma migrate dev"
   },
   "dependencies": {
-    "@prisma/client": "4.11.0",
+    "@prisma/client": "^6.4.1",
     "@react-oauth/google": "^0.8.0",
     "@react-spring/web": "^9.7.2",
     "@types/node": "18.14.6",
@@ -34,6 +34,6 @@
   "devDependencies": {
     "@types/styled-components": "^5.1.26",
     "eslint-plugin-unused-imports": "^2.0.0",
-    "prisma": "^4.11.0"
+    "prisma": "^6.4.1"
   }
 }
