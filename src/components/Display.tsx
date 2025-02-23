@@ -12,15 +12,15 @@ export const Display = () => {
   const { authorizationUrl, loading, isAuthenticated } = useIsAuthenticated();
 
   const checkSleep = useCallback(() => {
-    if (!sleep && new Date().getHours() === 2) {
+    if (!sleep && new Date().getHours() >= 0 && new Date().getHours() < 8) {
       setSleep(true);
     }
-    if (sleep && new Date().getHours() === 8) {
+    if (sleep && new Date().getHours() > 8) {
       setSleep(false);
     }
   }, [sleep]);
 
-  useEvery({ minute: 1 }, checkSleep);
+  useEvery({ minutes: 30 }, checkSleep);
 
   if (loading) {
     return <div>Loading...</div>;
