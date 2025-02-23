@@ -12,7 +12,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { Orientation } from "./types";
 
 type GetData = Photo[];
-type PostData = Photo[] | { message: string };
+type PostData = Photo[] | { message: string; nextPageToken: string | null };
 export type PhotosControllerData = GetData | PostData;
 
 const TAKE = 50;
@@ -123,14 +123,15 @@ export class PhotosController extends Controller {
         console.log("No albums ready to refresh");
         return res
           .status(HttpStatus.OK)
-          .send({ message: "No albums ready to refresh" });
+          .send({ message: "No albums ready to refresh", nextPageToken: null });
       }
 
       const currentPhotosCount = album.Photo.length;
 
-      const albumPhotos = await PhotoService.createFromAlbum({
-        albumId: album.id,
-      });
+      const { photos: albumPhotos, nextPageToken } =
+        await PhotoService.createFromAlbum({
+          albumId: album.id,
+        });
 
       const totalPhotosCount = albumPhotos.length;
 
@@ -154,12 +155,15 @@ export class PhotosController extends Controller {
         message: `Created ${
           totalPhotosCount - currentPhotosCount
         } photos from ${album.title} album.`,
+        nextPageToken,
       });
     } catch (e: any) {
       console.error("Error in PhotosController#POST");
       console.error(e);
 
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
+      res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: e.message, nextPageToken: null });
     }
   }
 

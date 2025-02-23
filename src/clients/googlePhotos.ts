@@ -108,7 +108,7 @@ export class GooglePhotos {
         body: JSON.stringify({
           albumId,
           ...(pageToken ? { pageToken } : {}),
-          pageSize: 50,
+          pageSize: 100,
         }),
         headers: {
           Authorization: `Bearer ${this.accessToken}`,
