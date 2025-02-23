@@ -11,11 +11,12 @@ datasource db {
 }
 
 model Album {
-  id          String   @id
-  title       String
-  show        Boolean
-  refreshable Boolean  @default(false)
-  lastRefresh DateTime @default(now())
+  id            String   @id
+  title         String
+  show          Boolean
+  refreshable   Boolean  @default(false)
+  lastRefresh   DateTime @default(now())
+  nextPageToken String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())

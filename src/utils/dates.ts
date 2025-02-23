@@ -1,7 +1,9 @@
 type Unit = "minute" | "minutes";
-
 export const hoursAgo = (hours: number) =>
   new Date(new Date().getTime() - hours * 60 * 60 * 1000);
+
+export const daysAgo = (days: number) =>
+  new Date(new Date().getTime() - days * 24 * 60 * 60 * 1000);
 
 export const seconds = (x: number) => x * 1000;
 

@@ -5,11 +5,11 @@ import { Prisma } from "@prisma/client";
 import { routeHandler } from "@/config/routeHandler";
 import { HttpStatus } from "@/constants";
 import { PhotoService } from "@/services/photoService";
-import { hoursAgo } from "@/utils/dates";
 import { shuffle } from "@/utils/shuffle";
 import { Photo } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Orientation } from "./types";
+import { daysAgo } from "../../utils/dates";
 
 type GetData = Photo[];
 type PostData = Photo[] | { message: string; nextPageToken: string | null };
@@ -99,16 +99,18 @@ export class PhotosController extends Controller {
     try {
       const { albumId, nextPageToken: pageToken } = req.body;
       let where: Prisma.AlbumWhereInput = {};
+
       if (albumId) {
         where = { id: albumId };
       } else {
         where = {
           refreshable: true,
           lastRefresh: {
-            lt: hoursAgo(24),
+            lt: daysAgo(7),
           },
         };
       }
+
       const album = await prisma.album.findFirst({
         where,
         include: {
@@ -126,19 +128,18 @@ export class PhotosController extends Controller {
           .send({ message: "No albums ready to refresh", nextPageToken: null });
       }
 
-      const currentPhotosCount = album.Photo.length;
-
       const { photos: albumPhotos, nextPageToken } =
         await PhotoService.createFromAlbum({
           albumId: album.id,
-          pageToken,
+          pageToken: pageToken || album.nextPageToken,
         });
 
       const totalPhotosCount = albumPhotos.length;
 
       await prisma.album.update({
         data: {
-          lastRefresh: new Date(),
+          ...(!nextPageToken && { lastRefresh: new Date() }),
+          nextPageToken: nextPageToken,
         },
         where: { id: album.id },
       });
@@ -148,14 +149,10 @@ export class PhotosController extends Controller {
       );
 
       console.log(
-        `Created ${totalPhotosCount - currentPhotosCount} photos from ${
-          album.title
-        } album.`
+        `Created ${totalPhotosCount} photos from ${album.title} album.`
       );
       res.status(HttpStatus.CREATED).json({
-        message: `Created ${
-          totalPhotosCount - currentPhotosCount
-        } photos from ${album.title} album.`,
+        message: `Created ${totalPhotosCount} photos from ${album.title} album.`,
         nextPageToken,
       });
     } catch (e: any) {
