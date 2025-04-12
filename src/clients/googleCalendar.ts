@@ -15,6 +15,7 @@ type GoogleCalendarResponse = {
     start: {
       dateTime?: string;
       date?: string;
+      timeZone?: string;
     };
   }[];
 };
@@ -73,8 +74,7 @@ export class GoogleCalendar {
       if (item.description?.match(/hideFromDisplay/)) return [];
 
       const {
-        start: { dateTime },
-        start: { date },
+        start: { dateTime, date, timeZone },
         summary: name,
         colorId,
       } = item;
@@ -86,7 +86,7 @@ export class GoogleCalendar {
             ? new Date(dateTime).toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
-                timeZone: "EST",
+                timeZone: timeZone || "EST",
               })
             : null,
           name,

@@ -34,6 +34,6 @@ export const Widgets = () => {
 
   const Widget = widgets[widget];
 
-  // return <Holidays onNext={() => {}} />;
-  return <Widget />;
+  return <Holidays onNext={() => {}} />;
+  // return <Widget />;
 };
