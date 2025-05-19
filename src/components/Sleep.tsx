@@ -2,7 +2,12 @@ import styled from "styled-components";
 import { Clock } from "./Time/Clock";
 import { useEffect, useState } from "react";
 
-export const Sleep = styled((props) => {
+type Props = {
+  onNext: () => void;
+};
+
+export const Sleep = styled(({ onNext, ...props }: Props) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [quote, setQuote] = useState("");
 
   useEffect(() => {
@@ -11,6 +16,7 @@ export const Sleep = styled((props) => {
         const response = await fetch("https://api.quotable.io/quotes/random");
         const data = await response.json();
         setQuote(data[0].content);
+        setIsLoading(false);
       } catch (e) {
         console.error("Error fetching quote:", e);
       }
@@ -18,8 +24,19 @@ export const Sleep = styled((props) => {
     fetchQuote();
   }, []);
 
+  useEffect(() => {
+    const interval = setTimeout(() => {
+      onNext();
+    }, 30000);
+
+    return () => clearTimeout(interval);
+  }, [onNext]);
+
   const day = new Date().getDate();
   const text = quote ? quote : day % 2 === 0 ? "Goodnight" : "Buenas noches";
+
+  if (isLoading) return null;
+
   return (
     <div {...props}>
       <div>{text}</div>

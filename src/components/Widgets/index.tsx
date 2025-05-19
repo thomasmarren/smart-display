@@ -28,7 +28,7 @@ export const Widgets = () => {
   } = {
     PhotoSlides: () => (
       // <PhotoSlides key="widget-1" slideshowSpeedSeconds={10} onNext={onNext} />
-      <Sleep />
+      <Sleep onNext={onNext} />
     ),
     Forecast: () => <Forecast key="widget-2" onNext={onNext} />,
     Holidays: () => <Holidays key="widget-3" onNext={onNext} />,
