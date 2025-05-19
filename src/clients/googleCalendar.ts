@@ -33,9 +33,7 @@ export class GoogleCalendar {
       accessToken: googleAccessToken,
       expiryDate,
       refreshToken,
-    } = await prisma.googleToken.findUniqueOrThrow({
-      where: { id: 1 },
-    });
+    } = await prisma.googleToken.findFirstOrThrow();
 
     let accessToken = googleAccessToken;
     if (new Date(Number(expiryDate)) < new Date()) {

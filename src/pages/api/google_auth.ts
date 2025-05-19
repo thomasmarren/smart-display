@@ -5,6 +5,8 @@ import { CALENDAR_READ_ONLY, PHOTOS_READ_ONLY } from "@/constants";
 import { google } from "googleapis";
 import type { NextApiRequest, NextApiResponse } from "next";
 
+export const revalidate = 0;
+
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_AUTH_CLIENT_ID,
   process.env.GOOGLE_AUTH_CLIENT_SECRET,
@@ -23,9 +25,7 @@ export class GoogleAuthController extends Controller {
   async GET(req: NextApiRequest, res: NextApiResponse<GetData>) {
     try {
       if (!req.query.code) {
-        const googleToken = await prisma.googleToken.findFirst({
-          where: { id: 1 },
-        });
+        const googleToken = await prisma.googleToken.findFirstOrThrow({});
 
         let isAuthenticated = false;
         if (googleToken) isAuthenticated = true;
@@ -33,6 +33,7 @@ export class GoogleAuthController extends Controller {
       }
 
       const { tokens } = await oauth2Client.getToken(req.query.code as string);
+      const googleToken = await prisma.googleToken.findFirst();
       await prisma.googleToken.upsert({
         create: {
           accessToken: tokens.access_token as string,
@@ -45,9 +46,10 @@ export class GoogleAuthController extends Controller {
           expiryDate: tokens.expiry_date as number,
         },
         where: {
-          id: 1,
+          id: googleToken?.id || 0,
         },
       });
+
       res.status(200).json({ isAuthenticated: true });
     } catch (e: any) {
       console.error(e);
@@ -59,6 +61,8 @@ export class GoogleAuthController extends Controller {
     const url = oauth2Client.generateAuthUrl({
       access_type: "offline",
       scope: [PHOTOS_READ_ONLY, CALENDAR_READ_ONLY],
+      prompt: "consent",
+      include_granted_scopes: true,
     });
 
     res.status(200).json({ url });

@@ -58,9 +58,11 @@ export class PhotosController extends Controller {
       });
 
       const ids = photos.map((photo) => `'${photo.id}'`).join(",");
-      await prisma.$executeRawUnsafe(
-        `UPDATE "Photo" SET "displayedCount" = "displayedCount" + 1, "sortOrder" = (random() * 10000) WHERE id IN (${ids})`
-      );
+      if (ids.length > 0) {
+        await prisma.$executeRawUnsafe(
+          `UPDATE "Photo" SET "displayedCount" = "displayedCount" + 1, "sortOrder" = (random() * 10000) WHERE id IN (${ids})`
+        );
+      }
 
       const portrait = photos.filter(
         (photo) => photo.orientation === Orientation.PORTRAIT

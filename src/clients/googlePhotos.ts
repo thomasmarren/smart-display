@@ -49,9 +49,7 @@ export class GooglePhotos {
       accessToken: googleAccessToken,
       expiryDate,
       refreshToken,
-    } = await prisma.googleToken.findUniqueOrThrow({
-      where: { id: 1 },
-    });
+    } = await prisma.googleToken.findFirstOrThrow({});
 
     let accessToken = googleAccessToken;
     if (new Date(Number(expiryDate)) < new Date()) {
@@ -66,8 +64,9 @@ export class GooglePhotos {
       const response = await oauth2Client.refreshAccessToken();
       accessToken = response.credentials.access_token as string;
       expiryDate = response.credentials.expiry_date as unknown as bigint;
+      const googleToken = await prisma.googleToken.findFirstOrThrow();
       await prisma.googleToken.update({
-        where: { id: 1 },
+        where: { id: googleToken?.id },
         data: {
           accessToken,
           expiryDate,
@@ -127,9 +126,10 @@ export class GooglePhotos {
   }
 
   public async photosForIds({ ids }: { ids: Photo["id"][] }) {
-    const url = `https://photoslibrary.googleapis.com/v1/mediaItems:batchGet?${new URLSearchParams(
-      new URLSearchParams(ids.map((id) => ["mediaItemIds", id]))
-    )}`;
+    const params = new URLSearchParams();
+    [ids[0]].forEach((id) => params.append("mediaItemIds", id));
+
+    const url = `https://photoslibrary.googleapis.com/v1/mediaItems:batchGet?${params.toString()}`;
 
     const response = await fetch(url, {
       headers: {
@@ -137,7 +137,18 @@ export class GooglePhotos {
       },
     });
 
+    if (!response.ok) {
+      const error = await response.json();
+      console.error("API call failed", response.status, error);
+      return [];
+    }
+
     const data = await response.json();
+
+    if (!data.mediaItemResults) {
+      console.error("Error fetching photos for ids", data);
+      return [];
+    }
 
     return data.mediaItemResults.map(
       (result: { mediaItem: object }) => result.mediaItem

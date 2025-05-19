@@ -15,13 +15,13 @@
   "dependencies": {
     "@prisma/client": "^6.4.1",
     "@react-oauth/google": "^0.8.0",
-    "@react-spring/web": "^9.7.2",
+    "@react-spring/web": "^10.0.0-beta.0",
     "@types/node": "18.14.6",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
     "eslint": "8.35.0",
     "eslint-config-next": "^15.1.7",
-    "googleapis": "^112.0.0",
+    "googleapis": "^148.0.0",
     "highcharts": "^11.1.0",
     "highcharts-react-official": "^3.2.0",
     "next": "^15.1.7",
@@ -29,7 +29,7 @@
     "react-dom": "^19.0.0",
     "sharp": "^0.31.3",
     "styled-components": "^5.3.8",
-    "typescript": "4.9.5"
+    "typescript": "^5.8.3"
   },
   "devDependencies": {
     "@types/styled-components": "^5.1.26",

@@ -31,7 +31,7 @@ const GoogleCallback = () => {
     getAccessToken();
   }, [router.query.code]);
 
-  if (isAuthenticated) return redirect("/display");
+  if (isAuthenticated) return router.push("/display");
 
   return <div>Authenticating...</div>;
 };

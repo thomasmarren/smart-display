@@ -5,6 +5,7 @@ import {
 import { Forecast } from "./Forecast";
 import { Holidays } from "./Holidays";
 import { PhotoSlides } from "./PhotoSlides";
+import { Sleep } from "../Sleep";
 
 export const Widgets = () => {
   const { widget, setWidget } = useCurrentWidget();
@@ -26,7 +27,8 @@ export const Widgets = () => {
     [key: string]: () => JSX.Element;
   } = {
     PhotoSlides: () => (
-      <PhotoSlides key="widget-1" slideshowSpeedSeconds={10} onNext={onNext} />
+      // <PhotoSlides key="widget-1" slideshowSpeedSeconds={10} onNext={onNext} />
+      <Sleep text="hello" />
     ),
     Forecast: () => <Forecast key="widget-2" onNext={onNext} />,
     Holidays: () => <Holidays key="widget-3" onNext={onNext} />,
