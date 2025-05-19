@@ -3,7 +3,7 @@ import { Clock } from "./Time/Clock";
 import { useEffect, useState } from "react";
 
 type Props = {
-  onNext: () => void;
+  onNext?: () => void;
 };
 
 export const Sleep = styled(({ onNext, ...props }: Props) => {
@@ -26,7 +26,7 @@ export const Sleep = styled(({ onNext, ...props }: Props) => {
 
   useEffect(() => {
     const interval = setTimeout(() => {
-      onNext();
+      onNext && onNext();
     }, 30000);
 
     return () => clearTimeout(interval);
